@@ -12,7 +12,7 @@ user = os.getenv("POSTGRES_USER", "usr-user")
 pwd = os.getenv("POSTGRES_PASSWORD", "password")
 
 
-for i in range(60):  # ~60s
+for i in range(60):
     try:
         conn = psycopg2.connect(
             host=host, port=port, dbname=db, user=user, password=pwd

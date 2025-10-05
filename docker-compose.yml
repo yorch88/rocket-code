@@ -12,14 +12,14 @@ services:
       - .:/app
     environment:
       PYTHONPATH: /app
-      WATCHFILES_FORCE_POLLING: "1"
+      WATCHFILES_FORCE_POLLING: "1" 
 
   db:
     image: postgres:16
     environment:
-      POSTGRES_USER: rocket-user
-      POSTGRES_PASSWORD: R0ck3t4rt1cl35
-      POSTGRES_DB: rocket-db
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:

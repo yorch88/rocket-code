@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
 echo "⏳ Waiting for DB..."
-python app/scripts/wait_for_db.py
+python -m app.scripts.wait_for_db
 
 # Avoid problematic local templates
 if [ -f /app/alembic.ini ]; then
@@ -17,8 +17,8 @@ import importlib
 
 print("🔎 Importing app and models...")
 app = importlib.import_module("app")
-models = importlib.import_module("app.models")  # <- important: executes models
-dbmod = importlib.import_module("app.db")       # <- must export Base
+models = importlib.import_module("app.models")  # executes models
+dbmod = importlib.import_module("app.db")       # must export Base
 Base = getattr(dbmod, "Base", None)
 
 if Base is None:

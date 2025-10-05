@@ -2,7 +2,7 @@ from typing import Any, Optional
 import json
 import redis
 from .config import get_settings
-from .schemas.schemas import ArticleOut  # para from_orm / validación
+from .schemas.schemas import ArticleOut
 
 _settings = get_settings()
 _r = redis.Redis(host=_settings.REDIS_HOST, port=_settings.REDIS_PORT, db=_settings.REDIS_DB)
@@ -14,11 +14,9 @@ def cache_key(article_id: int) -> str:
 
 
 def _serialize_article(article: Any) -> dict:
-    """Convierte un ORM o dict a dict serializable."""
     if isinstance(article, dict):
         return article
-    # Usamos Pydantic para serializar correctamente (incluye datetimes)
-    return ArticleOut.from_orm(article).dict()  # en Pydantic v2: .model_dump()
+    return ArticleOut.from_orm(article).dict()
 
 
 def get_cached_article(article_id: int) -> Optional[dict]:

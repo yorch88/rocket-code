@@ -19,13 +19,26 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
+
+# ===== URL de conexión dinámica ===== #
 def get_url():
+    """
+    Devuelve la URL de conexión de la base de datos.
+    Prioriza la variable de entorno DATABASE_URL (útil para CI/CD).
+    Si no existe, construye la URL usando get_settings().
+    """
+    env_url = os.getenv("DATABASE_URL")
+    if env_url:
+        return env_url
+
     s = get_settings()
     return (
         f"postgresql+psycopg2://{s.POSTGRES_USER}:{s.POSTGRES_PASSWORD}"
         f"@{s.POSTGRES_HOST}:{s.POSTGRES_PORT}/{s.POSTGRES_DB}"
     )
 
+
+# ===== Modo offline ===== #
 def run_migrations_offline():
     """Run migrations in 'offline' mode."""
     url = get_url()
@@ -36,11 +49,14 @@ def run_migrations_offline():
         compare_type=True,
         compare_server_default=True
     )
+
     with context.begin_transaction():
         context.run_migrations()
 
+
+# ===== Modo online ===== #
 def run_migrations_online():
-    """Run migrations in 'online' mode'."""
+    """Run migrations in 'online' mode."""
     connectable = engine_from_config(
         {"sqlalchemy.url": get_url()},
         prefix="sqlalchemy.",
@@ -58,6 +74,8 @@ def run_migrations_online():
         with context.begin_transaction():
             context.run_migrations()
 
+
+# ===== Ejecutar ===== #
 if context.is_offline_mode():
     run_migrations_offline()
 else:

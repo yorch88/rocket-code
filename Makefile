@@ -59,6 +59,9 @@ db-psql:
 	@echo "psql -> postgres://$(PGUSER)@$(PGHOST):$(PGPORT)/$(PGDB)"
 	$(COMPOSE) exec -e PGPASSWORD=R0ck3t4rt1cl35 $(DB_SVC) psql -U $(PGUSER) -d $(PGDB)
 
+redis-cli:
+	$(COMPOSE) exec $(REDIS_SVC) redis-cli
+
 migrate:
 	$(COMPOSE) exec $(API_SVC) alembic upgrade head
 
@@ -80,9 +83,6 @@ test-unit:
 
 test-cov:
 	docker compose run --rm api pytest -q --cov=app --cov-report=term-missing
-
-lint:
-	$(COMPOSE) exec $(API_SVC) sh -lc "python -m pip install -q ruff || true; ruff check app"
 
 fmt:
 	$(COMPOSE) exec $(API_SVC) sh -lc "python -m pip install -q black || true; black app"

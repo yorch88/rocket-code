@@ -161,7 +161,7 @@ KEYS article:*
 
 ```bash
 ...@ubuntu ~/Documents/rocketcode/rocket-code (main)
-$ docker compose exec redis redis-cli
+$ make redis-cli
 127.0.0.1:6379> KEYS article:*
 1) "article:3"
 127.0.0.1:6379> TTL article:3
