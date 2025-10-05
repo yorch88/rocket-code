@@ -30,7 +30,6 @@ def test_create_article_delegates_to_repo(monkeypatch):
     fake_created = {"id": 123, **payload_in}
 
     def fake_repo_create_article(db, data):
-
         assert "title" in data and data["title"] == "t"
         return fake_created
 
