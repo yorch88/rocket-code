@@ -49,7 +49,10 @@ def test_list_articles_delegates_to_repo(monkeypatch):
     assert filters.page == 1
     assert filters.page_size == 10
     assert filters.order == "desc"
+<<<<<<< HEAD
 
+=======
+>>>>>>> e7b31fc020576c5c1dfdb5b9cb73b10cab5f4868
 
 def test_create_article_delegates_to_repo(monkeypatch):
     from app.services import articles as svc
@@ -57,4 +60,17 @@ def test_create_article_delegates_to_repo(monkeypatch):
     payload_in = {"title": "t", "body": "b", "tags": "dev", "author": "me"}
     fake_created = {"id": 123, **payload_in}
 
+<<<<<<< HEAD
     def fake_repo_create
+=======
+    def fake_repo_create_article(db, data):
+        assert "title" in data and data["title"] == "t"
+        return fake_created
+
+    monkeypatch.setattr("app.repositories.articles.create_article", fake_repo_create_article)
+
+    created = svc.create_article(None, payload_in)
+
+    assert created["id"] == 123
+    assert created["title"] == "t"
+>>>>>>> e7b31fc020576c5c1dfdb5b9cb73b10cab5f4868
